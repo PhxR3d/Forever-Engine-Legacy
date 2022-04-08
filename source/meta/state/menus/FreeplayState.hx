@@ -2,6 +2,7 @@ package meta.state.menus;
 
 import flash.text.TextField;
 import flixel.FlxG;
+import flixel.input.keyboard.FlxKey;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -207,11 +208,18 @@ class FreeplayState extends MusicBeatState
 		var upP = controls.UI_UP_P;
 		var downP = controls.UI_DOWN_P;
 		var accepted = controls.ACCEPT;
+		var shift = FlxG.keys.pressed.SHIFT; // Only really used here so just use keys lol
+		//var upPhold = FlxG.keys.pressed.UP;
+		//var downPhold = FlxG.keys.pressed.DOWN; // Dk If I'll try and make these work well. They don't really have a point lel.
 
 		if (upP)
 			changeSelection(-1);
 		else if (downP)
 			changeSelection(1);
+		if (upP && shift) // Added the ability to go fast in the freeplay menu state :) - Red
+			changeSelection(-2);
+		else if (downP && shift)
+			changeSelection(2);
 
 		if (controls.UI_LEFT_P)
 			changeDiff(-1);
