@@ -11,6 +11,7 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import meta.data.Song.SwagSong;
 import meta.MusicBeat.MusicBeatSubState;
 import meta.data.font.Alphabet;
 import meta.state.*;
@@ -19,14 +20,17 @@ import meta.state.menus.*;
 class PauseSubState extends MusicBeatSubState
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
-
-	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Exit to menu'];
+    
+	var menuItems:Array<String> = [];
+	var menuItemsOG:Array<String> = ['Resume', 'Restart Song','Change Difficulty', 'Options', 'Exit to menu'];
+	var Diffs:Array<String> = ['Easy', 'Normal', 'Hard'];
 	var curSelected:Int = 0;
-
+	var Diff = PlayState.storyDifficulty;
 	var pauseMusic:FlxSound;
-
+	
 	public function new(x:Float, y:Float)
 	{
+		menuItems = menuItemsOG;
 		super();
 		#if debug
 		// trace('pause call');
@@ -118,6 +122,7 @@ class PauseSubState extends MusicBeatSubState
 		var upP = controls.UI_UP_P;
 		var downP = controls.UI_DOWN_P;
 		var accepted = controls.ACCEPT;
+		var back = controls.BACK;
 
 		if (upP)
 		{
@@ -131,6 +136,9 @@ class PauseSubState extends MusicBeatSubState
 		if (accepted)
 		{
 			var daSelected:String = menuItems[curSelected];
+			var name:String = PlayState.SONG.song;
+
+
 
 			switch (daSelected)
 			{
@@ -138,6 +146,19 @@ class PauseSubState extends MusicBeatSubState
 					close();
 				case "Restart Song":
 					Main.switchState(this, new PlayState());
+				case "Change Difficulty":
+					menuItems = Diffs;
+					regenMenu();
+				case "Easy":
+					PlayState.SONG = Song.loadFromJson(PlayState.SONG.song.toLowerCase() + "-easy", PlayState.SONG.song.tolowerCase());	
+				case "Normal":
+					PlayState.SONG = Song.loadFromJson(PlayState.SONG.song.toLowerCase(), PlayState.SONG.song.tolowerCase());
+
+				case "Hard":
+					PlayState.SONG = Song.loadFromJson(PlayState.SONG.song.toLowerCase() + "-hard", PlayState.SONG.song.tolowerCase());
+				case "Options":
+					PlayState.resetMusic();
+					Main.switchState(this, new OptionsMenuState());
 				case "Exit to menu":
 					PlayState.resetMusic();
 
@@ -146,7 +167,23 @@ class PauseSubState extends MusicBeatSubState
 					else
 						Main.switchState(this, new FreeplayState());
 			}
+			if (back)
+			{
+				switch (daSelected)
+				{
+					case "Easy", "Normal", "Hard":
+						menuItems = menuItemsOG;
+						regenMenu();
+				}
+			}
+			/*switch (DescriptTxt) 
+			{
+                  case "Restart":
+					  DescriptTxt = 'Restarts the Song from the beginning';
+			}*/
 		}
+
+
 
 		if (FlxG.keys.justPressed.J)
 		{
@@ -204,4 +241,20 @@ class PauseSubState extends MusicBeatSubState
 		#end
 		//
 	}
+	function regenMenu():Void {
+    for (i in 0...grpMenuShit.members.length) {
+    var obj = grpMenuShit.members[0];
+    obj.kill();
+    grpMenuShit.remove(obj, true);
+    obj.destroy();
+
+	}
+
+	for (i in 0...menuItems.length) {
+		var item = new Alphabet(0, 70 * i + 30, menuItems[i], true, false);
+		item.isMenuItem = true;
+		item.targetY = i;
+		grpMenuShit.add(item);
+	}
+}
 }

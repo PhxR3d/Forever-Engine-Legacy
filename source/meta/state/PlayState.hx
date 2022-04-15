@@ -89,7 +89,7 @@ class PlayState extends MusicBeatState
 
 	private static var prevCamFollow:FlxObject;
 
-	private var curSong:String = "";
+	public var curSong:String = "";
 	private var gfSpeed:Int = 1;
 
 	public static var health:Float = 1; // mario
