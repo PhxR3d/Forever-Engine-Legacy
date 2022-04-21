@@ -2,6 +2,8 @@ package meta.state.menus;
 
 import flixel.FlxBasic;
 import flixel.FlxG;
+import meta.subState.PauseSubState;
+import flixel.FlxSubState;
 import flixel.FlxSprite;
 import flixel.effects.FlxFlicker;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -569,6 +571,7 @@ class OptionsMenuState extends MusicBeatState
 
 	public function exitMenu()
 	{
+		var PlayStateLastState = PauseSubState.PlayStateLastState;
 		//
 		if (controls.ACCEPT)
 		{
@@ -576,6 +579,9 @@ class OptionsMenuState extends MusicBeatState
 			lockedMovement = true;
 			FlxFlicker.flicker(activeSubgroup.members[curSelection], 0.5, 0.06 * 2, true, false, function(flick:FlxFlicker)
 			{
+				if (PlayStateLastState = true) {
+					Main.switchState(this, new PlayState());
+				}
 				Main.switchState(this, new MainMenuState());
 				lockedMovement = false;
 			});

@@ -27,9 +27,10 @@ class MainMenuState extends MusicBeatState
 
 	var bg:FlxSprite; // the background has been separated for more control
 	var magenta:FlxSprite;
+	var logo:FlxSprite;
 	var camFollow:FlxObject;
 
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'options'];
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'options', /*'credits'*/];
 	var canSnap:Array<Float> = [];
 
 	// the create 'state'
@@ -73,6 +74,18 @@ class MainMenuState extends MusicBeatState
 		magenta.color = 0xFFfd719b;
 		add(magenta);
 
+		logo = new FlxSprite(690, -260);
+		logo.frames = Paths.getSparrowAtlas('menus/base/title/logoBumpin');
+		logo.antialiasing = true;
+		logo.animation.addByPrefix('bump', 'logo bumpin', 24);
+		logo.animation.play('bump');
+		logo.updateHitbox();
+		add(logo);
+
+		var scr:Float = (optionShit.length - 3) * 0.135;
+		logo.scrollFactor.set(0, 0);
+		logo.scale.set(0.3, 0.3);
+
 		// add the camera
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
@@ -99,7 +112,7 @@ class MainMenuState extends MusicBeatState
 			// menuItem.alpha = 0;
 
 			// placements
-			menuItem.screenCenter(X);
+			menuItem.x += 100;
 			// if the id is divisible by 2
 			if (menuItem.ID % 2 == 0)
 				menuItem.x += 1000;
@@ -247,6 +260,10 @@ class MainMenuState extends MusicBeatState
 					});
 				}
 			});
+		}
+		if (controls.BACK) 
+		{
+			Main.switchState(this, new TitleState());
 		}
 
 		if (Math.floor(curSelected) != lastCurSelected)

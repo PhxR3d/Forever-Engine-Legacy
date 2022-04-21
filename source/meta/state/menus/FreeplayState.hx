@@ -4,6 +4,7 @@ import flash.text.TextField;
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
 import flixel.FlxSprite;
+import gameObjects.Character;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
@@ -36,6 +37,9 @@ class FreeplayState extends MusicBeatState
 	var curSelected:Int = 0;
 	var curSongPlaying:Int = -1;
 	var curDifficulty:Int = 1;
+	var player = [];
+	var opponent = [];
+	var companion = [];
 
 	var scoreText:FlxText;
 	var diffText:FlxText;
@@ -192,6 +196,21 @@ class FreeplayState extends MusicBeatState
 				num[1]++;
 		}
 	}
+	/*public function addCharacters(character:Array<String>, ?BF:Array<String>, ?GF:Array<String>, ?DAD:Array<String>) 
+	{
+		BF = SONG.player1;
+		GF = SONG.player3;
+		DAD = SONG.player2;
+		if  (BF == null)
+			GF = Character.add('bf');
+		if (GF == null)
+			GF = Character.create('gf');
+		if (DAD == null)
+			DAD = ('dad');
+		BF.x = 100;
+		GF.x = 50;
+		DAD.x = -150;
+	}*/
 
 	override function update(elapsed:Float)
 	{
